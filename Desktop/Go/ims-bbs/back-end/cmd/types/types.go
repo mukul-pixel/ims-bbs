@@ -13,9 +13,8 @@ type Staff struct {
 }
 
 //Admin Service
-
 type AdminStore interface{
-	GetUserByEmail(email string) (Admin,error) 
+	GetUserByEmail(email string) (*Admin,error) 
 	CreateUser(user Admin)error
 }
 
@@ -25,7 +24,7 @@ type Admin struct {
 	LastName    string `json:"lastName"`
 	Email string `json:"email"`
 	Password string `json:"password"`
-	Contact     int `json:"contact"`
+	Contact     string `json:"contact"`
 	Address     string `json:"address"`
 	Age         int `json:"age"`
 	JoiningDate string `json:"joiningDate"`
@@ -37,7 +36,7 @@ type AdminPayload struct {
 	LastName    string `json:"lastName" validate:"required"`
 	Email string `json:"email" validate:"required,email"`
 	Password string `json:"password"  validate:"required,min=3,max=130"`
-	Contact     int `json:"contact"  validate:"required,min=10,max=10"`
+	Contact     string `json:"contact"  validate:"required,min=10,max=10"`
 	Address     string `json:"address" validate:"required"`
 	Age         int `json:"age" validate:"required"`
 	JoiningDate string `json:"joiningDate" validate:"required"`

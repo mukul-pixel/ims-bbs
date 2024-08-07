@@ -33,53 +33,72 @@ func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
 
 // this will create user but first read the data from the file and then create the user by hashing the password and storing in db
 func (h *Handler) handleAdmin(w http.ResponseWriter, r *http.Request) {
+	file, _, err := r.FormFile("file")
+	if err != nil {
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("error retrieving file: %v", err))
+		return
+	}
+	fmt.Println("checkpoint-1")
 
 	//register type payload
-	var user types.AdminPayload
-
-	//first i will get the data from the req and parse it to the json format
-	if err := utils.ParseJSON(r, &user); err != nil {
-		utils.WriteError(w, http.StatusBadRequest, err)
+	var user []types.AdminPayload
+	if user,err = utils.ReadFromFile(file); err != nil {
+		utils.WriteError(w,http.StatusBadRequest,fmt.Errorf("not able to read the file"))
 		return
 	}
 
-	//validating the fields
-	if err := utils.Validate.Struct(user); err != nil {
-		errors := err.(validator.ValidationErrors)
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload %v", errors))
-		return
-	}
+	fmt.Println("checkpoint 2 :",user);
 
-	//after parsing the data i'll check if the user already exists in the db or not
-	_, err := h.store.GetUserByEmail(user.Email)
-	if err != nil {
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("user with email %s already exists", user.Email))
-		return
-	}
+	
+	for _,row := range user{
+		// //first i will get the data from the req and parse it to the json format
+		// if err := utils.ParseJSON(r, &row); err != nil {
+		// 	utils.WriteError(w, http.StatusBadRequest, err)
+		// 	return
+	    // }
+		// fmt.Println("checkpoint 3 :");
 
-	//if the user not exists i'll convert hash the password
-	hashedPassword, err := auth.HashThePassword(user.Password)
-	if err !=nil {
-		utils.WriteError(w,http.StatusInternalServerError,err)
-		return
-	}
+		//validating the fields
+	    if err := utils.Validate.Struct(row); err != nil {
+		    errors := err.(validator.ValidationErrors)
+		    utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload %v", errors))
+		    return
+	    }
+		// fmt.Println("checkpoint 4 :");
+	
 
-	//create the user by inserting the values to sql
-	err = h.store.CreateUser(types.Admin{
-		FirstName: user.FirstName,
-		LastName: user.LastName,
-		Email: user.Email,
-		Password: hashedPassword,
-		Contact: user.Contact,
-		Address: user.Address,
-		Age: user.Age,
-		JoiningDate: user.JoiningDate,
-	})
-	if err != nil {
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("error registering the user"))
-		return
-	}
+	    //after parsing the data i'll check if the user already exists in the db or not
+	    _, err := h.store.GetUserByEmail(row.Email)
+	    if err != nil {
+		    utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("user with email %s already exists", row.Email))
+		    return
+	    }
+		// fmt.Println("checkpoint 5 :");
+
+	    //if the user not exists i'll convert hash the password
+	    hashedPassword, err := auth.HashThePassword(row.Password)
+	    if err !=nil {
+		    utils.WriteError(w,http.StatusInternalServerError,err)
+		    return
+	    }
+		// fmt.Println("checkpoint 6 :");
+
+	    //create the user by inserting the values to sql
+	    err = h.store.CreateUser(types.Admin{
+		    FirstName: row.FirstName,
+		    LastName: row.LastName,
+		    Email: row.Email,
+		    Password: hashedPassword,
+		    Contact: row.Contact,
+		    Address: row.Address,
+		    Age: row.Age,
+		    JoiningDate: row.JoiningDate,
+	    })
+	    if err != nil {
+		    utils.WriteError(w, http.StatusInternalServerError, fmt.Errorf("error registering the user: %s",row.Email))
+		    return
+	    }
+    }
 
 	utils.WriteJSON(w,http.StatusCreated,nil)
-
 }

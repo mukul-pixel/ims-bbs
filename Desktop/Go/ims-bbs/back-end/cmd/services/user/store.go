@@ -44,6 +44,7 @@ func(s *Store) CreateUser(user types.Admin)error{
 
 	return nil
 }
+
 func scanRowsIntoUsers(row *sql.Rows) (*types.Admin,error) {
 	user := new(types.Admin)
 
