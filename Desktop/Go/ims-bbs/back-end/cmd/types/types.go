@@ -42,3 +42,8 @@ type AdminPayload struct {
 	JoiningDate string `json:"joiningDate" validate:"required"`
 }
 
+type LoginPayload struct{
+	Email string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required"`
+}
+
