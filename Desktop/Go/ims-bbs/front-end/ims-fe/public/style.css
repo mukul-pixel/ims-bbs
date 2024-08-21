@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap');
+
+body{
+    padding: 0;
+    margin: 0;
+}
+
+.loginButton{
+    background-color: maroon
+}
+.loginButton:hover{
+    background-color: rgb(166, 62, 62);
+}
+
+.googleLoginButton{
+    color: black;
+    border: 1px solid black;
+}
+
+.googleLoginButton:hover{
+    background-color: rgb(198, 198, 198);
+}
+
+.loginDisplayImage{
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+@media (max-width: 767.98px) {
+    #bdSidebar {
+        width: 50%;
+    }
+}
+
+table {
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+    border-collapse: collapse;
+}
+
+input {
+    border: 1px solid rgb(34, 34, 34);
+    outline: none; /* Remove the default outline */
+}
+
+input:focus {
+    box-shadow: 0 0 0px 2px rgba(105, 178, 255, 0.633); /* Light blue shadow */
+    border-color: rgba(74, 146, 223, 0.8); /* Optional: Change border color on focus */
+}
+
+.createGRNButtons{
+    border: 1px solid rgb(34, 34, 34);
+    background-color: rgb(0, 149, 255);
+    font-family: 'Lora', serif;
+}

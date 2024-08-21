@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS merchant (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    merchant_name VARCHAR(255) NOT NULL,
+    merchant_address TEXT NOT NULL,
+    in_contact VARCHAR(255) NOT NULL,
+    contact_info VARCHAR(255) NOT NULL,
+    category VARCHAR(255) NOT NULL,
+    createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    
+    PRIMARY KEY(id)
+)

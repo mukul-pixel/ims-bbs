@@ -36,6 +36,26 @@ func (s *Store) GetUserByEmail(email string) (*types.Admin,error) {
 	return u,nil
 }
 
+func (s *Store) GetUserByID(id int)(*types.Admin,error){
+	rows,err := s.db.Query("SELECT * FROM users WHERE id = ?",id)
+	if err != nil{
+		return nil,err
+	}
+
+	u := new(types.Admin)
+	for rows.Next(){
+		u,err = scanRowsIntoUsers(rows)
+		if err != nil {
+			return nil,err
+		}
+	}
+	if u.ID == 0{
+		return nil,err
+	}
+
+	return u,nil
+}
+
 func(s *Store) CreateUser(user types.Admin)error{
 	_,err := s.db.Exec("INSERT INTO admins (firstName,lastName,email,password,contact,address,age,joiningDate) VALUES (?,?,?,?,?,?,?,?)",user.FirstName,user.LastName,user.Email,user.Password,user.Contact,user.Address,user.Age,user.JoiningDate)
 	if err != nil {
@@ -66,3 +86,4 @@ func scanRowsIntoUsers(row *sql.Rows) (*types.Admin,error) {
 
 	return user,nil
 }
+
