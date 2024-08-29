@@ -1,0 +1,1 @@
+The IMS-BBS project is a versatile Inventory Management System built with React, Go, and SQL. It offers an intuitive interface for updating inventory, adding products, authentication/authorisation of users, tracking pending/completed orders. The system efficiently handles inbound and outbound processes, showcasing my skills in developing practical and scalable solutions.
